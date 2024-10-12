@@ -1,0 +1,51 @@
+{
+  "project_info": {
+    "project_number": "955257567601",
+    "firebase_url": "https://leisurepace-a3d51-default-rtdb.firebaseio.com",
+    "project_id": "leisurepace-a3d51",
+    "storage_bucket": "leisurepace-a3d51.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:955257567601:android:469940dd8c0688eafe9ed0",
+        "android_client_info": {
+          "package_name": "com.example.leisurepace"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "955257567601-l8fi5lee71nisof53mrc1jr4onp9k4es.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.leisurepace",
+            "certificate_hash": "4ac3bd6e18bda0191ec9b00e5d9676a40876551c"
+          }
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyADbJp50gFcSE4JaMRc-gwka2m9BJoVaUo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "955257567601-197f3uvaj8etohke9dhdo1v5250utpil.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "955257567601-6e7sn8ealsrag19ghru9c7gsrja1pbfu.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.cindy.LeisurePace"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
