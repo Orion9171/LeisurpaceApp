@@ -4,6 +4,7 @@ plugins {
     alias(libs.plugins.google.gms.google.services)  // Google Services plugin for Firebase
 }
 
+
 android {
     namespace = "com.example.leisurepace"
     compileSdk = 34
@@ -92,8 +93,8 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(libs.ui.test.junit4)  // Compose UI testing
     //load in gif
-    implementation(libs.glide)
-    annotationProcessor(libs.compiler)
+    implementation(libs.glide.v4132)
+    annotationProcessor(libs.compiler.v4132)
     // Enforcing specific versions to avoid conflicts
     androidTestImplementation(libs.androidx.junit.v115)
     androidTestImplementation(libs.androidx.espresso.core.v350)
@@ -106,3 +107,5 @@ dependencies {
         }
     }
 }
+
+

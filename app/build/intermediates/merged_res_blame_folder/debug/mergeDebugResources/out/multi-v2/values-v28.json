@@ -4,7 +4,7 @@
             "outputFile": "com.example.leisurepace.app-mergeDebugResources-68:/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/d55f949e4b8bdc3f418698019b31e4b0/transformed/material-1.12.0/res/values-v28/values-v28.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/58de488719372170ed715ac98e5172fb/transformed/material-1.12.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -23,7 +23,7 @@
                     }
                 },
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/456d13afb481ffaa796055c71757734d/transformed/appcompat-1.7.0/res/values-v28/values-v28.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/af3bb01d6e7df6bf8dd3314ff9a9d85e/transformed/appcompat-1.7.0/res/values-v28/values-v28.xml",
                     "from": {
                         "startLines": "2,3,4,8",
                         "startColumns": "4,4,4,4",

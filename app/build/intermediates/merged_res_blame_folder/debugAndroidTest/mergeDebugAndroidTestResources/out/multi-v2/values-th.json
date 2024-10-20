@@ -4,24 +4,7 @@
             "outputFile": "com.example.leisurepace.test.app-mergeDebugAndroidTestResources-34:/values-th/values-th.xml",
             "map": [
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/e0bfa17ce31ef0c4b109cf013b6bc371/transformed/core-1.13.1/res/values-th/values-th.xml",
-                    "from": {
-                        "startLines": "2,3,4,5,6,7,8,9",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "55,151,254,352,450,553,658,770",
-                        "endColumns": "95,102,97,97,102,104,111,100",
-                        "endOffsets": "146,249,347,445,548,653,765,866"
-                    },
-                    "to": {
-                        "startLines": "2,3,4,5,6,7,8,24",
-                        "startColumns": "4,4,4,4,4,4,4,4",
-                        "startOffsets": "105,201,304,402,500,603,708,2083",
-                        "endColumns": "95,102,97,97,102,104,111,100",
-                        "endOffsets": "196,299,397,495,598,703,815,2179"
-                    }
-                },
-                {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/39d7e19cbd1c09ae902810dc4eaf4447/transformed/ui-release/res/values-th/values-th.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/8c7800a51bd2750b15cc922a4ced3c3b/transformed/ui-release/res/values-th/values-th.xml",
                     "from": {
                         "startLines": "2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19",
                         "startColumns": "4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4,4",
@@ -35,6 +18,23 @@
                         "startOffsets": "820,906,983,1080,1181,1269,1354,1439,1525,1608,1694,1783,1856,1931,2007,2184,2262,2329",
                         "endColumns": "85,76,96,100,87,84,84,85,82,85,88,72,74,75,75,77,66,122",
                         "endOffsets": "901,978,1075,1176,1264,1349,1434,1520,1603,1689,1778,1851,1926,2002,2078,2257,2324,2447"
+                    }
+                },
+                {
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/1f89ba49fcb7642dd524a256966a6584/transformed/core-1.13.1/res/values-th/values-th.xml",
+                    "from": {
+                        "startLines": "2,3,4,5,6,7,8,9",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "55,151,254,352,450,553,658,770",
+                        "endColumns": "95,102,97,97,102,104,111,100",
+                        "endOffsets": "146,249,347,445,548,653,765,866"
+                    },
+                    "to": {
+                        "startLines": "2,3,4,5,6,7,8,24",
+                        "startColumns": "4,4,4,4,4,4,4,4",
+                        "startOffsets": "105,201,304,402,500,603,708,2083",
+                        "endColumns": "95,102,97,97,102,104,111,100",
+                        "endOffsets": "196,299,397,495,598,703,815,2179"
                     }
                 }
             ]

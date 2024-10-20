@@ -3,6 +3,8 @@ package com.example.leisurepace
 import android.media.MediaPlayer
 import android.os.Bundle
 import android.os.CountDownTimer
+import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -21,6 +23,7 @@ class HomeFragment : Fragment() {
     private lateinit var bpmSpinner: Spinner
     private lateinit var timeSpinner: Spinner
     private lateinit var runningGif: ImageView
+    private lateinit var ivBackground: ImageView  // Background ImageView reference
     private var mediaPlayer: MediaPlayer? = null
 
     private var timerRunning = false
@@ -38,6 +41,96 @@ class HomeFragment : Fragment() {
     private val strideLength = 0.78
     private var distance = 0.0
 
+    // Image switching variables
+    private val handler = Handler(Looper.getMainLooper())
+    private var currentImageIndex = 0
+    private val backgroundImages = arrayOf(
+        R.drawable.main_bg2,
+        R.drawable.main_bg3,
+        R.drawable.main_bg4,
+        R.drawable.main_bg5,
+        R.drawable.main_bg6,
+        R.drawable.main_bg7,
+        R.drawable.main_bg8,
+        R.drawable.main_bg9,
+        R.drawable.main_bg12,
+        R.drawable.main_bg13,
+        R.drawable.main_bg14,
+        R.drawable.main_bg15,
+        R.drawable.main_bg16,
+        R.drawable.main_bg17,
+        R.drawable.main_bg18,
+        R.drawable.main_bg19,
+        R.drawable.main_bg20,
+        R.drawable.main_bg21,
+        R.drawable.main_bg22,
+        R.drawable.main_bg23,
+        R.drawable.main_bg24,
+        R.drawable.main_bg25,
+        R.drawable.main_bg26,
+        R.drawable.main_bg27,
+        R.drawable.main_bg28,
+        R.drawable.main_bg29,
+        R.drawable.main_bg30,
+        R.drawable.main_bg31,
+        R.drawable.main_bg32,
+        R.drawable.main_bg33,
+        R.drawable.main_bg34,
+        R.drawable.main_bg35,
+        R.drawable.main_bg36,
+        R.drawable.main_bg37,
+        R.drawable.main_bg38,
+        R.drawable.main_bg39,
+        R.drawable.main_bg40,
+        R.drawable.main_bg41,
+        R.drawable.main_bg42,
+        R.drawable.main_bg43,
+        R.drawable.main_bg44,
+        R.drawable.main_bg45,
+        R.drawable.main_bg46,
+        R.drawable.main_bg47,
+        R.drawable.main_bg48,
+        R.drawable.main_bg49,
+        R.drawable.main_bg50,
+        R.drawable.main_bg51,
+        R.drawable.main_bg52,
+        R.drawable.main_bg53,
+        R.drawable.main_bg54,
+        R.drawable.main_bg55,
+        R.drawable.main_bg56,
+        R.drawable.main_bg57,
+        R.drawable.main_bg58,
+        R.drawable.main_bg59,
+        R.drawable.main_bg60,
+        R.drawable.main_bg61,
+        R.drawable.main_bg62,
+        R.drawable.main_bg63,
+        R.drawable.main_bg64,
+        R.drawable.main_bg65,
+        R.drawable.main_bg66,
+        R.drawable.main_bg67,
+        R.drawable.main_bg68,
+        R.drawable.main_bg69,
+        R.drawable.main_bg70,
+        R.drawable.main_bg71,
+        R.drawable.main_bg72,
+        R.drawable.main_bg73,
+        R.drawable.main_bg74,
+        R.drawable.main_bg75,
+        R.drawable.main_bg76
+    )
+
+    // Runnable to switch images every 10 seconds
+    private val imageSwitcherRunnable = object : Runnable {
+        override fun run() {
+            if (timerRunning) {
+                ivBackground.setImageResource(backgroundImages[currentImageIndex])
+                currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+                handler.postDelayed(this, 10000)  // Switch every 10 seconds
+            }
+        }
+    }
+
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -53,6 +146,7 @@ class HomeFragment : Fragment() {
         bpmSpinner = view.findViewById(R.id.bpm_spinner)
         timeSpinner = view.findViewById(R.id.time_spinner)
         runningGif = view.findViewById(R.id.runningGif)
+        ivBackground = view.findViewById(R.id.iv_background)  // Reference to ImageView
 
         startStopButton.isEnabled = false
 
@@ -65,6 +159,7 @@ class HomeFragment : Fragment() {
                 val selectedBpm = parent?.getItemAtPosition(position).toString()
                 updateBpm(selectedBpm)
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -73,6 +168,7 @@ class HomeFragment : Fragment() {
                 val selectedTime = parent?.getItemAtPosition(position).toString()
                 updateTime(selectedTime)
             }
+
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
@@ -138,6 +234,9 @@ class HomeFragment : Fragment() {
             showRunningGif()
             playBpmSound(bpm)
 
+            // Start image switching when the timer starts
+            handler.post(imageSwitcherRunnable)
+
             countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
                     timeLeftInMillis = millisUntilFinished
@@ -152,6 +251,7 @@ class HomeFragment : Fragment() {
                     timerRunning = false
                     startStopButton.text = "開始"
                     hideRunningGif()
+                    handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when finished
                 }
             }.start()
 
@@ -166,6 +266,7 @@ class HomeFragment : Fragment() {
         resetAllMetrics()
         stopBpmSound()
         hideRunningGif()
+        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching
         startStopButton.text = "開始"
     }
 
@@ -237,5 +338,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         stopBpmSound()
+        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when view is destroyed
     }
 }
