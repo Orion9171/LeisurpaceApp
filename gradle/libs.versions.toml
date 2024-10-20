@@ -3,6 +3,8 @@ agp = "8.5.1"
 androidxJunit = "1.1.5"
 credentials = "1.2.2"
 espressoCoreVersion = "3.5.0"
+firebaseAuthVersion = "22.1.1"
+firebaseDatabase = "21.0.0"
 glide = "4.12.0"
 kotlin = "1.9.0"
 coreKtx = "1.13.1"
@@ -40,6 +42,8 @@ androidx-junit-v115 = { module = "androidx.test.ext:junit", version.ref = "andro
 androidx-material = { module = "androidx.compose.material:material", version.ref = "materialVersion" }
 androidx-ui-test-junit4-v105 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4Version" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
+firebase-auth-v2211 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
+firebase-database = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabase" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
