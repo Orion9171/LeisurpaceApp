@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -24,9 +23,9 @@ class HomeFragment : Fragment() {
     private lateinit var bpmSpinner: Spinner
     private lateinit var timeSpinner: Spinner
     private lateinit var runningGif: ImageView
-    private lateinit var ivBackground: ImageView // Added ImageView for background
-
+    private lateinit var ivBackground: ImageView  // Background ImageView reference
     private var mediaPlayer: MediaPlayer? = null
+
     private var timerRunning = false
     private var bpmSelected = false
     private var timeSelected = false
@@ -42,7 +41,7 @@ class HomeFragment : Fragment() {
     private val strideLength = 0.78
     private var distance = 0.0
 
-    // Background image changing variables
+    // Image switching variables
     private val handler = Handler(Looper.getMainLooper())
     private var currentImageIndex = 0
     private val backgroundImages = arrayOf(
@@ -119,16 +118,15 @@ class HomeFragment : Fragment() {
         R.drawable.main_bg74,
         R.drawable.main_bg75,
         R.drawable.main_bg76
-        // Add more images as needed
     )
 
+    // Runnable to switch images every 10 seconds
     private val imageSwitcherRunnable = object : Runnable {
         override fun run() {
             if (timerRunning) {
-                currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
                 ivBackground.setImageResource(backgroundImages[currentImageIndex])
-                Log.d("HomeFragment", "Switching to image index: $currentImageIndex")
-                handler.postDelayed(this, 10000) // Switch every 10 seconds
+                currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+                handler.postDelayed(this, 10000)  // Switch every 10 seconds
             }
         }
     }
@@ -148,7 +146,7 @@ class HomeFragment : Fragment() {
         bpmSpinner = view.findViewById(R.id.bpm_spinner)
         timeSpinner = view.findViewById(R.id.time_spinner)
         runningGif = view.findViewById(R.id.runningGif)
-        ivBackground = view.findViewById(R.id.iv_background) // Reference for background
+        ivBackground = view.findViewById(R.id.iv_background)  // Reference to ImageView
 
         startStopButton.isEnabled = false
 
@@ -236,13 +234,8 @@ class HomeFragment : Fragment() {
             showRunningGif()
             playBpmSound(bpm)
 
-            // Immediately change the image when starting the timer
-            ivBackground.visibility = View.VISIBLE
-            currentImageIndex = 0  // Start from the first image
-            ivBackground.setImageResource(backgroundImages[currentImageIndex])
-
-            // Schedule the image to keep changing every 10 seconds
-            handler.postDelayed(imageSwitcherRunnable, 10000)
+            // Start image switching when the timer starts
+            handler.post(imageSwitcherRunnable)
 
             countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -258,7 +251,7 @@ class HomeFragment : Fragment() {
                     timerRunning = false
                     startStopButton.text = "開始"
                     hideRunningGif()
-                    handler.removeCallbacks(imageSwitcherRunnable)  // Stop image switching
+                    handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when finished
                 }
             }.start()
 
@@ -273,7 +266,7 @@ class HomeFragment : Fragment() {
         resetAllMetrics()
         stopBpmSound()
         hideRunningGif()
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop background image switching
+        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching
         startStopButton.text = "開始"
     }
 
@@ -345,6 +338,6 @@ class HomeFragment : Fragment() {
     override fun onDestroyView() {
         super.onDestroyView()
         stopBpmSound()
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop background switching
+        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when view is destroyed
     }
 }
