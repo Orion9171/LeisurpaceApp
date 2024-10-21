@@ -36,11 +36,10 @@
 
     <ImageView
         android:id="@+id/iv_background"
-        android:layout_width="885dp"
-        android:layout_height="484dp"
+        android:layout_width="934dp"
+        android:layout_height="423dp"
         android:layout_marginTop="152dp"
         android:scaleType="centerCrop"
-        android:src="@drawable/main_bg"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.035"

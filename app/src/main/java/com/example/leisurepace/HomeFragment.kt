@@ -148,6 +148,9 @@ class HomeFragment : Fragment() {
         runningGif = view.findViewById(R.id.runningGif)
         ivBackground = view.findViewById(R.id.iv_background)  // Reference to ImageView
 
+        // Set a default background image before start is pressed
+        ivBackground.setImageResource(R.drawable.main_bg)
+
         startStopButton.isEnabled = false
 
         startStopButton.setOnClickListener {
@@ -234,8 +237,11 @@ class HomeFragment : Fragment() {
             showRunningGif()
             playBpmSound(bpm)
 
-            // Start image switching when the timer starts
-            handler.post(imageSwitcherRunnable)
+            // Immediately switch the first background image when timer starts
+            ivBackground.setImageResource(backgroundImages[currentImageIndex])
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+            // Continue switching every 10 seconds
+            handler.postDelayed(imageSwitcherRunnable, 10000)
 
             countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
