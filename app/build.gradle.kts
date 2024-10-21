@@ -106,6 +106,7 @@ dependencies {
             force("androidx.test.espresso:espresso-core:3.5.0")
         }
     }
+    implementation(kotlin("script-runtime"))
 }
 
 
