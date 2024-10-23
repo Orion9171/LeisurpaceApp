@@ -2,6 +2,7 @@
 agp = "8.5.1"
 androidxJunit = "1.1.5"
 compiler = "4.13.2"
+compilerVersion = "<glide_version>"
 credentials = "1.2.2"
 espressoCoreVersion = "3.5.0"
 firebaseAuthVersion = "22.1.1"
@@ -45,6 +46,7 @@ androidx-material = { module = "androidx.compose.material:material", version.ref
 androidx-ui-test-junit4-v105 = { module = "androidx.compose.ui:ui-test-junit4", version.ref = "uiTestJunit4Version" }
 compiler = { module = "com.github.bumptech.glide:compiler", version.ref = "glide" }
 compiler-v4132 = { module = "com.github.bumptech.glide:compiler", version.ref = "compiler" }
+compiler-vglideversion = { module = "com.github.bumptech.glide:compiler", version.ref = "compilerVersion" }
 firebase-auth-v2211 = { module = "com.google.firebase:firebase-auth", version.ref = "firebaseAuthVersion" }
 firebase-database = { module = "com.google.firebase:firebase-database", version.ref = "firebaseDatabase" }
 glide = { module = "com.github.bumptech.glide:glide", version.ref = "glide" }
