@@ -4,7 +4,7 @@
             "outputFile": "com.example.leisurepace.app-mergeDebugResources-68:/values-watch-v20/values-watch-v20.xml",
             "map": [
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/ecce04a08c3191df9e878ac363b7f478/transformed/play-services-auth-21.2.0/res/values-watch-v20/values.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/6c98cf5ab1f3b7b877a36c73dbb30570/transformed/play-services-auth-21.2.0/res/values-watch-v20/values.xml",
                     "from": {
                         "startLines": "4,5,6,7,8,9,10,11",
                         "startColumns": "0,0,0,0,0,0,0,0",
@@ -21,7 +21,7 @@
                     }
                 },
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/14a8a91bdff3e7fd165e39c70354c5a9/transformed/appcompat-1.7.0/res/values-watch-v20/values-watch-v20.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/699f9746c3bb65e7dda8e8bc77f5dac3/transformed/appcompat-1.7.0/res/values-watch-v20/values-watch-v20.xml",
                     "from": {
                         "startLines": "2,5,8",
                         "startColumns": "4,4,4",

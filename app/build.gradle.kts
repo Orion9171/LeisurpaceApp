@@ -62,7 +62,8 @@ dependencies {
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.ui)  // Compose UI components
     implementation(libs.ui.tooling.preview)
-    implementation(libs.androidx.material3)  // Material Design 3
+    implementation(libs.androidx.material3)
+    implementation(libs.firebase.firestore)  // Material Design 3
     debugImplementation(libs.ui.tooling)  // For Compose debugging
     androidTestImplementation(libs.ui.test.junit4)  // For Compose UI testing in instrumentation tests
 
@@ -79,6 +80,7 @@ dependencies {
     implementation(libs.play.services.auth)  // Google Sign-In and Play Services
     implementation(libs.firebase.database)
     implementation(libs.firebase.auth.v2211)
+
 
     // Credential Manager for Google Sign-In
     implementation(libs.androidx.credentials)  // Credential Manager API

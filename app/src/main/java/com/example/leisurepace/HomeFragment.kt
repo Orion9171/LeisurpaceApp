@@ -5,12 +5,15 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import com.bumptech.glide.Glide
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.Query
 
 class HomeFragment : Fragment() {
 
@@ -23,7 +26,7 @@ class HomeFragment : Fragment() {
     private lateinit var bpmSpinner: Spinner
     private lateinit var timeSpinner: Spinner
     private lateinit var runningGif: ImageView
-    private lateinit var ivBackground: ImageView  // Background ImageView reference
+    private lateinit var ivBackground: ImageView
     private var mediaPlayer: MediaPlayer? = null
 
     private var timerRunning = false
@@ -36,12 +39,11 @@ class HomeFragment : Fragment() {
     private var bpm = 180
     private var steps = 0
     private var kcal = 0.0
-    private var weight = 70.0
+    private var weight = 59.0 // default weight if no previous record
     private val met = 6.0
     private val strideLength = 0.78
     private var distance = 0.0
 
-    // Image switching variables
     private val handler = Handler(Looper.getMainLooper())
     private var currentImageIndex = 0
     private val backgroundImages = arrayOf(
@@ -118,18 +120,23 @@ class HomeFragment : Fragment() {
         R.drawable.main_bg74,
         R.drawable.main_bg75,
         R.drawable.main_bg76
+        // Add more images as needed
     )
 
-    // Runnable to switch images every 10 seconds
     private val imageSwitcherRunnable = object : Runnable {
         override fun run() {
             if (timerRunning) {
                 ivBackground.setImageResource(backgroundImages[currentImageIndex])
                 currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
-                handler.postDelayed(this, 10000)  // Switch every 10 seconds
+                handler.postDelayed(this, 5000) // Switch every 5 seconds
             }
         }
     }
+
+    private enum class ButtonMode { START, STOP, RESET }
+    private var buttonMode = ButtonMode.START
+
+    private lateinit var firestore: FirebaseFirestore
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -137,24 +144,18 @@ class HomeFragment : Fragment() {
     ): View? {
         val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-        timeDisplay = view.findViewById(R.id.timer)
-        stepCountDisplay = view.findViewById(R.id.footstep)
-        kcalDisplay = view.findViewById(R.id.kcal_display)
-        distanceDisplay = view.findViewById(R.id.distance_display)
-        weightInput = view.findViewById(R.id.weight_input)
-        startStopButton = view.findViewById(R.id.start_button)
-        bpmSpinner = view.findViewById(R.id.bpm_spinner)
-        timeSpinner = view.findViewById(R.id.time_spinner)
-        runningGif = view.findViewById(R.id.runningGif)
-        ivBackground = view.findViewById(R.id.iv_background)  // Reference to ImageView
+        firestore = FirebaseFirestore.getInstance()
+        initializeViews(view)
 
-        // Set a default background image before start is pressed
-        ivBackground.setImageResource(R.drawable.main_bg)
-
-        startStopButton.isEnabled = false
+        // Retrieve the last weight from Firestore on view creation
+        retrieveLastWeight()
 
         startStopButton.setOnClickListener {
-            if (timerRunning) stopTimer() else startTimer()
+            when (buttonMode) {
+                ButtonMode.START -> startTimer()
+                ButtonMode.STOP -> stopTimer()
+                ButtonMode.RESET -> resetTimer()
+            }
         }
 
         bpmSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
@@ -176,6 +177,45 @@ class HomeFragment : Fragment() {
         }
 
         return view
+    }
+
+    private fun initializeViews(view: View) {
+        timeDisplay = view.findViewById(R.id.timer)
+        stepCountDisplay = view.findViewById(R.id.footstep)
+        kcalDisplay = view.findViewById(R.id.kcal_display)
+        distanceDisplay = view.findViewById(R.id.distance_display)
+        weightInput = view.findViewById(R.id.weight_input)
+        startStopButton = view.findViewById(R.id.start_button)
+        bpmSpinner = view.findViewById(R.id.bpm_spinner)
+        timeSpinner = view.findViewById(R.id.time_spinner)
+        runningGif = view.findViewById(R.id.runningGif)
+        ivBackground = view.findViewById(R.id.iv_background)
+
+        ivBackground.setImageResource(R.drawable.main_bg)
+        startStopButton.isEnabled = false
+        startStopButton.text = "Start"
+    }
+
+    private fun retrieveLastWeight() {
+        firestore.collection("RunningRecords")
+            .orderBy("timestamp", Query.Direction.DESCENDING)
+            .limit(1)
+            .get()
+            .addOnSuccessListener { documents ->
+                if (!documents.isEmpty) {
+                    val lastRecord = documents.documents[0]
+                    weight = lastRecord.getDouble("weight") ?: weight
+                    weightInput.setText(weight.toString())
+                    Log.d("FirestoreDebug", "Retrieved last weight: $weight")
+                } else {
+                    Log.d("FirestoreDebug", "No previous weight found, using default: $weight")
+                    weightInput.setText(weight.toString())
+                }
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreDebug", "Error retrieving last weight: ${e.message}")
+                weightInput.setText(weight.toString())
+            }
     }
 
     private fun updateBpm(selectedBpm: String) {
@@ -213,35 +253,15 @@ class HomeFragment : Fragment() {
         startStopButton.isEnabled = bpmSelected && timeSelected
     }
 
-    private fun playBpmSound(bpm: Int) {
-        mediaPlayer?.release()
-        mediaPlayer = null
-
-        val soundResId = when (bpm) {
-            120 -> R.raw.bpm120
-            150 -> R.raw.bpm150
-            180 -> R.raw.bpm180
-            210 -> R.raw.bpm210
-            240 -> R.raw.bpm240
-            else -> R.raw.bpm180
-        }
-
-        mediaPlayer = MediaPlayer.create(requireContext(), soundResId)
-        mediaPlayer?.isLooping = true // Ensure the sound loops seamlessly
-        mediaPlayer?.start()
-    }
-
     private fun startTimer() {
         if (validateWeight()) {
             resetAllMetrics()
             showRunningGif()
             playBpmSound(bpm)
 
-            // Immediately switch the first background image when timer starts
             ivBackground.setImageResource(backgroundImages[currentImageIndex])
             currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
-            // Continue switching every 10 seconds
-            handler.postDelayed(imageSwitcherRunnable, 10000)
+            handler.postDelayed(imageSwitcherRunnable, 5000) // Start switching images
 
             countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -255,43 +275,39 @@ class HomeFragment : Fragment() {
 
                 override fun onFinish() {
                     timerRunning = false
-                    startStopButton.text = "開始"
+                    startStopButton.text = "Reset"
+                    buttonMode = ButtonMode.RESET
                     hideRunningGif()
-                    handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when finished
+                    handler.removeCallbacks(imageSwitcherRunnable)
                 }
             }.start()
 
             timerRunning = true
-            startStopButton.text = "重啟"
+            startStopButton.text = "Stop"
+            buttonMode = ButtonMode.STOP
         }
     }
 
     private fun stopTimer() {
         if (this::countDownTimer.isInitialized) countDownTimer.cancel()
         timerRunning = false
+        stopBpmSound()
+        hideRunningGif()
+        handler.removeCallbacks(imageSwitcherRunnable) // Stop switching images
+
+        saveSessionData()
+
+        startStopButton.text = "Reset"
+        buttonMode = ButtonMode.RESET
+    }
+
+    private fun resetTimer() {
         resetAllMetrics()
         stopBpmSound()
         hideRunningGif()
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching
-        startStopButton.text = "開始"
-    }
-
-    private fun showRunningGif() {
-        runningGif.visibility = View.VISIBLE
-        Glide.with(this)
-            .asGif()
-            .load(R.drawable.run)
-            .into(runningGif)
-    }
-
-    private fun hideRunningGif() {
-        runningGif.visibility = View.GONE
-    }
-
-    private fun stopBpmSound() {
-        mediaPlayer?.stop()
-        mediaPlayer?.release()
-        mediaPlayer = null
+        handler.removeCallbacks(imageSwitcherRunnable)
+        startStopButton.text = "Start"
+        buttonMode = ButtonMode.START
     }
 
     private fun resetAllMetrics() {
@@ -341,9 +357,68 @@ class HomeFragment : Fragment() {
         stepCountDisplay.text = steps.toString()
     }
 
+    private fun showRunningGif() {
+        runningGif.visibility = View.VISIBLE
+        Glide.with(this)
+            .asGif()
+            .load(R.drawable.run)
+            .into(runningGif)
+    }
+
+    private fun hideRunningGif() {
+        runningGif.visibility = View.GONE
+    }
+
+    private fun playBpmSound(bpm: Int) {
+        mediaPlayer?.release()
+        mediaPlayer = null
+
+        val soundResId = when (bpm) {
+            120 -> R.raw.bpm120
+            150 -> R.raw.bpm150
+            180 -> R.raw.bpm180
+            210 -> R.raw.bpm210
+            240 -> R.raw.bpm240
+            else -> R.raw.bpm180
+        }
+
+        mediaPlayer = MediaPlayer.create(requireContext(), soundResId)
+        mediaPlayer?.isLooping = true
+        mediaPlayer?.start()
+    }
+
+    private fun stopBpmSound() {
+        mediaPlayer?.stop()
+        mediaPlayer?.release()
+        mediaPlayer = null
+    }
+
+    private fun saveSessionData() {
+        Log.d("FirestoreDebug", "Attempting to save session data: Weight = $weight, Time = ${totalTimeInMillis - timeLeftInMillis}, Calories = $kcal, Distance = $distance, Steps = $steps")
+
+        val runningRecords = hashMapOf(
+            "weight" to weight,
+            "timeInMillis" to totalTimeInMillis - timeLeftInMillis,
+            "calories" to kcal,
+            "distanceKm" to distance,
+            "steps" to steps,
+            "timestamp" to System.currentTimeMillis()
+        )
+
+        firestore.collection("RunningRecords")
+            .add(runningRecords)
+            .addOnSuccessListener {
+                Toast.makeText(context, "Session data saved!", Toast.LENGTH_SHORT).show()
+                Log.d("FirestoreDebug", "Session data saved successfully.")
+            }
+            .addOnFailureListener { e ->
+                Log.e("FirestoreDebug", "Failed to save session data: ${e.message}")
+            }
+    }
+
     override fun onDestroyView() {
         super.onDestroyView()
         stopBpmSound()
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop image switching when view is destroyed
+        handler.removeCallbacks(imageSwitcherRunnable)
     }
 }
