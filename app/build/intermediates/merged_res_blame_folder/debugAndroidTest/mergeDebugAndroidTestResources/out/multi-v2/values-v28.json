@@ -4,7 +4,7 @@
             "outputFile": "com.example.leisurepace.test.app-mergeDebugAndroidTestResources-34:/values-v28/values-v28.xml",
             "map": [
                 {
-                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/48bf4f3a16ded1fc943deed10f1bc861/transformed/core-1.5.0/res/values-v28/values.xml",
+                    "source": "/Users/zhangbinghan/.gradle/caches/transforms-4/9242f2e3748f43d40aa2617916c8ba33/transformed/core-1.5.0/res/values-v28/values.xml",
                     "from": {
                         "startLines": "4,13",
                         "startColumns": "0,0",

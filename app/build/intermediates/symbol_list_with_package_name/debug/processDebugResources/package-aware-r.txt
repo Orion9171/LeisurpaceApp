@@ -3099,7 +3099,9 @@ drawable m3_tabs_background
 drawable m3_tabs_line_indicator
 drawable m3_tabs_rounded_line_indicator
 drawable m3_tabs_transparent_background
-drawable main_bg
+drawable main_bg1
+drawable main_bg10
+drawable main_bg11
 drawable main_bg12
 drawable main_bg13
 drawable main_bg14
@@ -3169,8 +3171,6 @@ drawable main_bg71
 drawable main_bg72
 drawable main_bg73
 drawable main_bg74
-drawable main_bg75
-drawable main_bg76
 drawable main_bg8
 drawable main_bg9
 drawable material_cursor_drawable
@@ -3244,8 +3244,9 @@ id BOTTOM_START
 id CTRL
 id Email
 id FUNCTION
-id FrameLayout
+id Login
 id LoginButton
+id Logout
 id META
 id NO_DEBUG
 id SHIFT
@@ -3339,7 +3340,6 @@ id beginning
 id bestChoice
 id blocking
 id bottom
-id bottomNavigationView
 id bounce
 id bounceBoth
 id bounceEnd
@@ -3902,8 +3902,8 @@ layout abc_search_dropdown_item_icons_2line
 layout abc_search_view
 layout abc_select_dialog_material
 layout abc_tooltip
+layout activity_home
 layout activity_login
-layout activity_main
 layout activity_splash
 layout browser_actions_context_menu_page
 layout browser_actions_context_menu_row
@@ -3923,7 +3923,6 @@ layout design_navigation_menu
 layout design_navigation_menu_item
 layout design_text_input_end_icon
 layout design_text_input_start_icon
-layout fragment_home
 layout ime_base_split_test_activity
 layout ime_secondary_split_test_activity
 layout m3_alert_dialog
@@ -3987,7 +3986,6 @@ layout select_dialog_item_material
 layout select_dialog_multichoice_material
 layout select_dialog_singlechoice_material
 layout support_simple_spinner_dropdown_item
-menu bottom_nav_menu
 mipmap ic_launcher
 mipmap ic_launcher_foreground
 mipmap ic_launcher_round
