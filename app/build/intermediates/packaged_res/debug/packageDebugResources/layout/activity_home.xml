@@ -35,24 +35,22 @@
         app:layout_constraintStart_toEndOf="@+id/bpm_spinner"
         app:layout_constraintTop_toTopOf="parent" />
 
+
     <ImageView
         android:id="@+id/iv_background"
-        android:layout_width="969dp"
-        android:layout_height="491dp"
-        android:layout_marginTop="152dp"
+        android:layout_width="374dp"
+        android:layout_height="487dp"
         android:scaleType="centerCrop"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.035"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-
     <Button
         android:id="@+id/start_button"
-        android:layout_width="63dp"
-        android:layout_height="38dp"
+        android:layout_width="93dp"
+        android:layout_height="41dp"
         android:layout_marginStart="8dp"
         android:background="#0CC6F4"
         android:text="開始"
@@ -97,50 +95,37 @@
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.556"
+        app:layout_constraintHorizontal_bias="0.393"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.251" />
+        app:layout_constraintVertical_bias="0.248" />
 
     <TextView
         android:id="@+id/kcal_display"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Calories: 0 kcal"
+        android:text="Cal: 0 kcal"
         android:textColor="#000000"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.033"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.254" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/footstepDisplay"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="步數："
+        android:text="步數：0"
         android:textColor="#000000"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.887"
+        app:layout_constraintHorizontal_bias="0.662"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.25" />
-
-    <TextView
-        android:id="@+id/footstep"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="0"
-        android:textColor="#000000"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.973"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.252" />
+        app:layout_constraintVertical_bias="0.247" />
 
     <EditText
         android:id="@+id/weight_input"
@@ -180,5 +165,19 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         android:layout_margin="8dp" />
+
+    <Button
+        android:id="@+id/Reset"
+        android:layout_width="70dp"
+        android:layout_height="42dp"
+        android:backgroundTint="#0CC6F4"
+        android:text="重置"
+        android:textColor="#FFFFFF"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.231" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

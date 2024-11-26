@@ -24,13 +24,16 @@ public final class ActivityHomeBinding implements ViewBinding {
   private final ConstraintLayout rootView;
 
   @NonNull
+  public final Button Reset;
+
+  @NonNull
   public final Spinner bpmSpinner;
 
   @NonNull
   public final TextView distanceDisplay;
 
   @NonNull
-  public final TextView footstep;
+  public final TextView footstepDisplay;
 
   @NonNull
   public final ImageView ivBackground;
@@ -48,9 +51,6 @@ public final class ActivityHomeBinding implements ViewBinding {
   public final TextView textView12;
 
   @NonNull
-  public final TextView textView3;
-
-  @NonNull
   public final TextView textView4;
 
   @NonNull
@@ -62,22 +62,22 @@ public final class ActivityHomeBinding implements ViewBinding {
   @NonNull
   public final EditText weightInput;
 
-  private ActivityHomeBinding(@NonNull ConstraintLayout rootView, @NonNull Spinner bpmSpinner,
-      @NonNull TextView distanceDisplay, @NonNull TextView footstep,
-      @NonNull ImageView ivBackground, @NonNull TextView kcalDisplay, @NonNull ImageView runningGif,
-      @NonNull Button startButton, @NonNull TextView textView12, @NonNull TextView textView3,
-      @NonNull TextView textView4, @NonNull Spinner timeSpinner, @NonNull TextView timer,
-      @NonNull EditText weightInput) {
+  private ActivityHomeBinding(@NonNull ConstraintLayout rootView, @NonNull Button Reset,
+      @NonNull Spinner bpmSpinner, @NonNull TextView distanceDisplay,
+      @NonNull TextView footstepDisplay, @NonNull ImageView ivBackground,
+      @NonNull TextView kcalDisplay, @NonNull ImageView runningGif, @NonNull Button startButton,
+      @NonNull TextView textView12, @NonNull TextView textView4, @NonNull Spinner timeSpinner,
+      @NonNull TextView timer, @NonNull EditText weightInput) {
     this.rootView = rootView;
+    this.Reset = Reset;
     this.bpmSpinner = bpmSpinner;
     this.distanceDisplay = distanceDisplay;
-    this.footstep = footstep;
+    this.footstepDisplay = footstepDisplay;
     this.ivBackground = ivBackground;
     this.kcalDisplay = kcalDisplay;
     this.runningGif = runningGif;
     this.startButton = startButton;
     this.textView12 = textView12;
-    this.textView3 = textView3;
     this.textView4 = textView4;
     this.timeSpinner = timeSpinner;
     this.timer = timer;
@@ -111,6 +111,12 @@ public final class ActivityHomeBinding implements ViewBinding {
     // This is done to optimize the compiled bytecode for size and performance.
     int id;
     missingId: {
+      id = R.id.Reset;
+      Button Reset = ViewBindings.findChildViewById(rootView, id);
+      if (Reset == null) {
+        break missingId;
+      }
+
       id = R.id.bpm_spinner;
       Spinner bpmSpinner = ViewBindings.findChildViewById(rootView, id);
       if (bpmSpinner == null) {
@@ -123,9 +129,9 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.footstep;
-      TextView footstep = ViewBindings.findChildViewById(rootView, id);
-      if (footstep == null) {
+      id = R.id.footstepDisplay;
+      TextView footstepDisplay = ViewBindings.findChildViewById(rootView, id);
+      if (footstepDisplay == null) {
         break missingId;
       }
 
@@ -159,12 +165,6 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      id = R.id.textView3;
-      TextView textView3 = ViewBindings.findChildViewById(rootView, id);
-      if (textView3 == null) {
-        break missingId;
-      }
-
       id = R.id.textView4;
       TextView textView4 = ViewBindings.findChildViewById(rootView, id);
       if (textView4 == null) {
@@ -189,9 +189,9 @@ public final class ActivityHomeBinding implements ViewBinding {
         break missingId;
       }
 
-      return new ActivityHomeBinding((ConstraintLayout) rootView, bpmSpinner, distanceDisplay,
-          footstep, ivBackground, kcalDisplay, runningGif, startButton, textView12, textView3,
-          textView4, timeSpinner, timer, weightInput);
+      return new ActivityHomeBinding((ConstraintLayout) rootView, Reset, bpmSpinner,
+          distanceDisplay, footstepDisplay, ivBackground, kcalDisplay, runningGif, startButton,
+          textView12, textView4, timeSpinner, timer, weightInput);
     }
     String missingId = rootView.getResources().getResourceName(id);
     throw new NullPointerException("Missing required view with ID: ".concat(missingId));

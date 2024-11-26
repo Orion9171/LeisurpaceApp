@@ -101,11 +101,12 @@ id Email
 id Login
 id LoginButton
 id Logout
+id Reset
 id Signup
 id bpm_spinner
 id button2
 id distance_display
-id footstep
+id footstepDisplay
 id imageView2
 id imageView3
 id intro
@@ -118,7 +119,6 @@ id start_button
 id textView
 id textView12
 id textView2
-id textView3
 id textView4
 id textView6
 id textView8

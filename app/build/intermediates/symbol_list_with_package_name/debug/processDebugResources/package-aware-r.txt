@@ -3249,6 +3249,7 @@ id LoginButton
 id Logout
 id META
 id NO_DEBUG
+id Reset
 id SHIFT
 id SHOW_ALL
 id SHOW_PATH
@@ -3453,7 +3454,7 @@ id fitXY
 id fixed
 id flip
 id floating
-id footstep
+id footstepDisplay
 id forever
 id fragment_container_view_tag
 id frost
@@ -3727,7 +3728,6 @@ id textTop
 id textView
 id textView12
 id textView2
-id textView3
 id textView4
 id textView6
 id textView8

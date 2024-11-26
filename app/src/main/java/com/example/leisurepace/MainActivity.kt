@@ -5,7 +5,6 @@ import android.os.Bundle
 import android.os.CountDownTimer
 import android.os.Handler
 import android.os.Looper
-import android.util.Log
 import android.widget.*
 import androidx.appcompat.app.AppCompatActivity
 import com.bumptech.glide.Glide
@@ -15,10 +14,11 @@ import com.google.firebase.firestore.Query
 class MainActivity : AppCompatActivity() {
 
     private lateinit var timeDisplay: TextView
-    private lateinit var stepCountDisplay: TextView
+    private lateinit var footstepDisplay: TextView // Combined footstep label and value
     private lateinit var kcalDisplay: TextView
     private lateinit var distanceDisplay: TextView
     private lateinit var startStopButton: Button
+    private lateinit var resetButton: Button
     private lateinit var weightInput: EditText
     private lateinit var bpmSpinner: Spinner
     private lateinit var timeSpinner: Spinner
@@ -49,75 +49,7 @@ class MainActivity : AppCompatActivity() {
         R.drawable.main_bg3,
         R.drawable.main_bg4,
         R.drawable.main_bg5,
-        R.drawable.main_bg6,
-        R.drawable.main_bg7,
-        R.drawable.main_bg8,
-        R.drawable.main_bg9,
-        R.drawable.main_bg10,
-        R.drawable.main_bg11,
-        R.drawable.main_bg12,
-        R.drawable.main_bg13,
-        R.drawable.main_bg14,
-        R.drawable.main_bg15,
-        R.drawable.main_bg16,
-        R.drawable.main_bg17,
-        R.drawable.main_bg18,
-        R.drawable.main_bg19,
-        R.drawable.main_bg20,
-        R.drawable.main_bg21,
-        R.drawable.main_bg22,
-        R.drawable.main_bg23,
-        R.drawable.main_bg24,
-        R.drawable.main_bg25,
-        R.drawable.main_bg26,
-        R.drawable.main_bg27,
-        R.drawable.main_bg28,
-        R.drawable.main_bg29,
-        R.drawable.main_bg30,
-        R.drawable.main_bg31,
-        R.drawable.main_bg32,
-        R.drawable.main_bg33,
-        R.drawable.main_bg34,
-        R.drawable.main_bg35,
-        R.drawable.main_bg36,
-        R.drawable.main_bg37,
-        R.drawable.main_bg38,
-        R.drawable.main_bg39,
-        R.drawable.main_bg40,
-        R.drawable.main_bg41,
-        R.drawable.main_bg42,
-        R.drawable.main_bg43,
-        R.drawable.main_bg44,
-        R.drawable.main_bg45,
-        R.drawable.main_bg46,
-        R.drawable.main_bg47,
-        R.drawable.main_bg48,
-        R.drawable.main_bg49,
-        R.drawable.main_bg50,
-        R.drawable.main_bg51,
-        R.drawable.main_bg52,
-        R.drawable.main_bg53,
-        R.drawable.main_bg54,
-        R.drawable.main_bg55,
-        R.drawable.main_bg56,
-        R.drawable.main_bg57,
-        R.drawable.main_bg58,
-        R.drawable.main_bg59,
-        R.drawable.main_bg60,
-        R.drawable.main_bg61,
-        R.drawable.main_bg62,
-        R.drawable.main_bg63,
-        R.drawable.main_bg64,
-        R.drawable.main_bg65,
-        R.drawable.main_bg66,
-        R.drawable.main_bg67,
-        R.drawable.main_bg68,
-        R.drawable.main_bg69,
-        R.drawable.main_bg70,
-        R.drawable.main_bg71,
-        R.drawable.main_bg72,
-        R.drawable.main_bg73,
-        R.drawable.main_bg74
+        R.drawable.main_bg6
     )
 
     private val imageSwitcherRunnable = object : Runnable {
@@ -129,7 +61,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private enum class ButtonMode { START, STOP, RESET }
+    private enum class ButtonMode { START, STOP, CONTINUE }
     private var buttonMode = ButtonMode.START
 
     private lateinit var firestore: FirebaseFirestore
@@ -139,18 +71,26 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_home)
 
         firestore = FirebaseFirestore.getInstance()
+
         initializeViews()
 
         retrieveLastWeight()
 
+        // Start/Stop/Continue Button Click Listener
         startStopButton.setOnClickListener {
             when (buttonMode) {
                 ButtonMode.START -> startTimer()
                 ButtonMode.STOP -> stopTimer()
-                ButtonMode.RESET -> resetTimer()
+                ButtonMode.CONTINUE -> continueTimer()
             }
         }
 
+        // Reset Button Click Listener
+        resetButton.setOnClickListener {
+            resetTimer()
+        }
+
+        // BPM Spinner Listener
         bpmSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
                 val selectedBpm = parent?.getItemAtPosition(position).toString()
@@ -160,6 +100,7 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
 
+        // Time Spinner Listener
         timeSpinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: android.view.View?, position: Int, id: Long) {
                 val selectedTime = parent?.getItemAtPosition(position).toString()
@@ -172,11 +113,12 @@ class MainActivity : AppCompatActivity() {
 
     private fun initializeViews() {
         timeDisplay = findViewById(R.id.timer)
-        stepCountDisplay = findViewById(R.id.footstep)
+        footstepDisplay = findViewById(R.id.footstepDisplay) // Updated ID
         kcalDisplay = findViewById(R.id.kcal_display)
         distanceDisplay = findViewById(R.id.distance_display)
         weightInput = findViewById(R.id.weight_input)
         startStopButton = findViewById(R.id.start_button)
+        resetButton = findViewById(R.id.Reset)
         bpmSpinner = findViewById(R.id.bpm_spinner)
         timeSpinner = findViewById(R.id.time_spinner)
         runningGif = findViewById(R.id.runningGif)
@@ -197,15 +139,23 @@ class MainActivity : AppCompatActivity() {
                     val lastRecord = documents.documents[0]
                     weight = lastRecord.getDouble("weight") ?: weight
                     weightInput.setText(weight.toString())
-                    Log.d("FirestoreDebug", "Retrieved last weight: $weight")
                 } else {
                     weightInput.setText(weight.toString())
                 }
             }
-            .addOnFailureListener { e ->
-                Log.e("FirestoreDebug", "Error retrieving last weight: ${e.message}")
+            .addOnFailureListener {
                 weightInput.setText(weight.toString())
             }
+    }
+
+    private fun updateBackgroundImage() {
+        runOnUiThread {
+            Glide.with(this)
+                .load(backgroundImages[currentImageIndex])
+                .placeholder(R.drawable.main_bg1)
+                .into(ivBackground)
+            currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+        }
     }
 
     private fun updateBpm(selectedBpm: String) {
@@ -214,7 +164,6 @@ class MainActivity : AppCompatActivity() {
             "150 BPM" -> 150
             "180 BPM" -> 180
             "210 BPM" -> 210
-            "240 BPM" -> 240
             else -> 180
         }
         bpmSelected = true
@@ -228,8 +177,6 @@ class MainActivity : AppCompatActivity() {
             "20 minutes" -> 20L
             "30 minutes" -> 30L
             "40 minutes" -> 40L
-            "50 minutes" -> 50L
-            "60 minutes" -> 60L
             else -> 30L
         }
         timeLeftInMillis = selectedTimeInMinutes * 60000
@@ -249,7 +196,6 @@ class MainActivity : AppCompatActivity() {
             showRunningGif()
             playBpmSound(bpm)
 
-            // Immediately update the background image and start switching
             updateBackgroundImage()
             handler.postDelayed(imageSwitcherRunnable, 10000)
 
@@ -265,10 +211,10 @@ class MainActivity : AppCompatActivity() {
 
                 override fun onFinish() {
                     timerRunning = false
-                    startStopButton.text = "Reset"
-                    buttonMode = ButtonMode.RESET
+                    startStopButton.text = "Start"
+                    buttonMode = ButtonMode.START
                     hideRunningGif()
-                    handler.removeCallbacks(imageSwitcherRunnable) // Stop switching images
+                    handler.removeCallbacks(imageSwitcherRunnable)
                 }
             }.start()
 
@@ -284,21 +230,57 @@ class MainActivity : AppCompatActivity() {
         stopBpmSound()
         hideRunningGif()
 
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop background switching
-        saveSessionData()
+        handler.removeCallbacks(imageSwitcherRunnable)
 
-        startStopButton.text = "Reset"
-        buttonMode = ButtonMode.RESET
+        startStopButton.text = "Continue"
+        buttonMode = ButtonMode.CONTINUE
+    }
+
+    private fun continueTimer() {
+        showRunningGif()
+        playBpmSound(bpm)
+
+        handler.postDelayed(imageSwitcherRunnable, 10000)
+
+        countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
+            override fun onTick(millisUntilFinished: Long) {
+                timeLeftInMillis = millisUntilFinished
+                updateTimerText()
+                calculateSteps(millisUntilFinished)
+                updateStepCount()
+                updateCalories()
+                updateDistance()
+            }
+
+            override fun onFinish() {
+                timerRunning = false
+                startStopButton.text = "Start"
+                buttonMode = ButtonMode.START
+                hideRunningGif()
+                handler.removeCallbacks(imageSwitcherRunnable)
+            }
+        }.start()
+
+        timerRunning = true
+        startStopButton.text = "Stop"
+        buttonMode = ButtonMode.STOP
     }
 
     private fun resetTimer() {
-        resetAllMetrics()
+        if (this::countDownTimer.isInitialized) countDownTimer.cancel()
+        timerRunning = false
         stopBpmSound()
         hideRunningGif()
+        handler.removeCallbacks(imageSwitcherRunnable)
 
-        handler.removeCallbacks(imageSwitcherRunnable) // Stop background switching
+        resetAllMetrics()
+
+        currentImageIndex = 0
+        ivBackground.setImageResource(R.drawable.main_bg1)
         startStopButton.text = "Start"
         buttonMode = ButtonMode.START
+
+        Toast.makeText(this, "Reset successfully!", Toast.LENGTH_SHORT).show()
     }
 
     private fun resetAllMetrics() {
@@ -330,7 +312,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateCalories() {
         val caloriesPerStep = met * weight * 3.5 / 200
         kcal = steps * caloriesPerStep
-        kcalDisplay.text = String.format("Calories: %.2f kcal", kcal)
+        kcalDisplay.text = String.format("Cal: %.2f kcal", kcal)
     }
 
     private fun updateDistance() {
@@ -345,12 +327,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateStepCount() {
-        stepCountDisplay.text = steps.toString()
-    }
-
-    private fun updateBackgroundImage() {
-        ivBackground.setImageResource(backgroundImages[currentImageIndex])
-        currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+        footstepDisplay.text = "Steps: $steps" // Updated to reflect combined component
     }
 
     private fun showRunningGif() {
@@ -374,7 +351,6 @@ class MainActivity : AppCompatActivity() {
             150 -> R.raw.bpm150
             180 -> R.raw.bpm180
             210 -> R.raw.bpm210
-            240 -> R.raw.bpm240
             else -> R.raw.bpm180
         }
 
@@ -390,15 +366,12 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun saveSessionData() {
-        Log.d("FirestoreDebug", "Attempting to save session data: Weight = $weight, Time = ${totalTimeInMillis - timeLeftInMillis}, Calories = $kcal, Distance = $distance, Steps = $steps")
-
         val runningRecords = hashMapOf(
             "weight" to weight,
             "duration" to totalTimeInMillis - timeLeftInMillis,
             "calories" to kcal,
             "distanceKm" to distance,
             "steps" to steps,
-            "timestamp" to System.currentTimeMillis()
         )
 
         firestore.collection("RunningRecords")
@@ -406,14 +379,11 @@ class MainActivity : AppCompatActivity() {
             .addOnSuccessListener {
                 Toast.makeText(this, "Session data saved!", Toast.LENGTH_SHORT).show()
             }
-            .addOnFailureListener { e ->
-                Log.e("FirestoreDebug", "Failed to save session data: ${e.message}")
-            }
     }
 
     override fun onDestroy() {
         super.onDestroy()
         stopBpmSound()
-        handler.removeCallbacks(imageSwitcherRunnable) // Ensure no memory leaks
+        handler.removeCallbacks(imageSwitcherRunnable)
     }
 }

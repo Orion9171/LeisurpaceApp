@@ -3248,6 +3248,7 @@ int id LoginButton 0x7f090007
 int id Logout 0x7f090008
 int id META 0x7f090009
 int id NO_DEBUG 0x7f09000a
+int id Reset 0x7f090225
 int id SHIFT 0x7f09000b
 int id SHOW_ALL 0x7f09000c
 int id SHOW_PATH 0x7f09000d
@@ -3452,7 +3453,7 @@ int id fitXY 0x7f0900d3
 int id fixed 0x7f0900d4
 int id flip 0x7f0900d5
 int id floating 0x7f0900d6
-int id footstep 0x7f0900d7
+int id footstepDisplay 0x7f090226
 int id forever 0x7f0900d8
 int id fragment_container_view_tag 0x7f0900d9
 int id frost 0x7f0900da
@@ -3726,7 +3727,6 @@ int id textTop 0x7f0901e5
 int id textView 0x7f0901e6
 int id textView12 0x7f0901e7
 int id textView2 0x7f0901e8
-int id textView3 0x7f0901e9
 int id textView4 0x7f0901ea
 int id textView6 0x7f0901eb
 int id textView8 0x7f0901ec
