@@ -49,7 +49,75 @@ class MainActivity : AppCompatActivity() {
         R.drawable.main_bg3,
         R.drawable.main_bg4,
         R.drawable.main_bg5,
-        R.drawable.main_bg6
+        R.drawable.main_bg6,
+        R.drawable.main_bg7,
+        R.drawable.main_bg8,
+        R.drawable.main_bg9,
+        R.drawable.main_bg10,
+        R.drawable.main_bg11,
+        R.drawable.main_bg12,
+        R.drawable.main_bg13,
+        R.drawable.main_bg14,
+        R.drawable.main_bg15,
+        R.drawable.main_bg16,
+        R.drawable.main_bg17,
+        R.drawable.main_bg18,
+        R.drawable.main_bg19,
+        R.drawable.main_bg20,
+        R.drawable.main_bg21,
+        R.drawable.main_bg22,
+        R.drawable.main_bg23,
+        R.drawable.main_bg24,
+        R.drawable.main_bg25,
+        R.drawable.main_bg26,
+        R.drawable.main_bg27,
+        R.drawable.main_bg28,
+        R.drawable.main_bg29,
+        R.drawable.main_bg30,
+        R.drawable.main_bg31,
+        R.drawable.main_bg32,
+        R.drawable.main_bg33,
+        R.drawable.main_bg34,
+        R.drawable.main_bg35,
+        R.drawable.main_bg36,
+        R.drawable.main_bg37,
+        R.drawable.main_bg38,
+        R.drawable.main_bg39,
+        R.drawable.main_bg40,
+        R.drawable.main_bg41,
+        R.drawable.main_bg42,
+        R.drawable.main_bg43,
+        R.drawable.main_bg44,
+        R.drawable.main_bg45,
+        R.drawable.main_bg46,
+        R.drawable.main_bg47,
+        R.drawable.main_bg48,
+        R.drawable.main_bg49,
+        R.drawable.main_bg50,
+        R.drawable.main_bg51,
+        R.drawable.main_bg52,
+        R.drawable.main_bg53,
+        R.drawable.main_bg54,
+        R.drawable.main_bg55,
+        R.drawable.main_bg56,
+        R.drawable.main_bg57,
+        R.drawable.main_bg58,
+        R.drawable.main_bg59,
+        R.drawable.main_bg60,
+        R.drawable.main_bg61,
+        R.drawable.main_bg62,
+        R.drawable.main_bg63,
+        R.drawable.main_bg64,
+        R.drawable.main_bg65,
+        R.drawable.main_bg66,
+        R.drawable.main_bg67,
+        R.drawable.main_bg68,
+        R.drawable.main_bg69,
+        R.drawable.main_bg70,
+        R.drawable.main_bg71,
+        R.drawable.main_bg72,
+        R.drawable.main_bg73,
+        R.drawable.main_bg74
     )
 
     private val imageSwitcherRunnable = object : Runnable {
@@ -149,12 +217,25 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateBackgroundImage() {
-        runOnUiThread {
+        try {
+            // Attempt to use Glide
             Glide.with(this)
+                .asDrawable() // Ensure Glide treats the resource as a drawable
                 .load(backgroundImages[currentImageIndex])
-                .placeholder(R.drawable.main_bg1)
+                .placeholder(R.drawable.main_bg1) // Fallback image
                 .into(ivBackground)
+
+            // Move to the next image
             currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+        } catch (e: Exception) {
+            e.printStackTrace()
+
+            // Fallback to directly loading resource if Glide fails
+            runOnUiThread {
+                val drawable = resources.getDrawable(backgroundImages[currentImageIndex], null)
+                ivBackground.setImageDrawable(drawable)
+                currentImageIndex = (currentImageIndex + 1) % backgroundImages.size
+            }
         }
     }
 
@@ -196,8 +277,8 @@ class MainActivity : AppCompatActivity() {
             showRunningGif()
             playBpmSound(bpm)
 
-            updateBackgroundImage()
-            handler.postDelayed(imageSwitcherRunnable, 10000)
+            updateBackgroundImage() // Immediate update
+            handler.postDelayed(imageSwitcherRunnable, 10000) // Schedule next updates
 
             countDownTimer = object : CountDownTimer(timeLeftInMillis, 1000) {
                 override fun onTick(millisUntilFinished: Long) {
@@ -312,7 +393,7 @@ class MainActivity : AppCompatActivity() {
     private fun updateCalories() {
         val caloriesPerStep = met * weight * 3.5 / 200
         kcal = steps * caloriesPerStep
-        kcalDisplay.text = String.format("Cal: %.2f kcal", kcal)
+        kcalDisplay.text = String.format("Cal: %.2f", kcal)
     }
 
     private fun updateDistance() {
@@ -327,7 +408,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun updateStepCount() {
-        footstepDisplay.text = "Steps: $steps" // Updated to reflect combined component
+        footstepDisplay.text = "Steps: $steps"
     }
 
     private fun showRunningGif() {
