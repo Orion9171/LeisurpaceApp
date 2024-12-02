@@ -180,6 +180,10 @@
         "source": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-main-72:/mipmap-mdpi/ic_launcher_round.webp"
     },
     {
+        "merged": "com.example.leisurepace.app-debug-70:/drawable_run.gif.flat",
+        "source": "com.example.leisurepace.app-main-72:/drawable/run.gif"
+    },
+    {
         "merged": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-debug-70:/drawable_main_bg11.jpg.flat",
         "source": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-main-72:/drawable/main_bg11.jpg"
     },
@@ -206,10 +210,6 @@
     {
         "merged": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-debug-70:/drawable_baseline_menu_24.xml.flat",
         "source": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-main-72:/drawable/baseline_menu_24.xml"
-    },
-    {
-        "merged": "com.example.leisurepace.app-debug-70:/layout_activity_home.xml.flat",
-        "source": "com.example.leisurepace.app-main-72:/layout/activity_home.xml"
     },
     {
         "merged": "/Users/zhangbinghan/.gradle/daemon/8.7/com.example.leisurepace.app-debug-70:/xml_data_extraction_rules.xml.flat",
